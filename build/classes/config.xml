@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+ <configuration>
+ <!-- 引入外部资源 -->
+ <properties resource="db.properties"></properties>
+ 	<environments default="development">
+ 	<environment id="development">
+ 	<transactionManager type="JDBC"></transactionManager>
+ 		<dataSource type="POOLED">
+ 			<property name="driver" value="${driver}"/>
+ 			<property name="url" value="${url}"/>
+ 			<property name="username" value="${username}"/>
+ 			<property name="password" value="${password}"/>
+ 		</dataSource>
+ 		
+ 	</environment>
+ 	</environments>
+ 	<mappers>
+ 	<!-- 注册接口方式  resource(类路径) url(网络路径) class(前提) 注解（在class类路径  在接口上注解）   -->
+ 		<!-- <mapper class=""/> 前提:接口与映射文件在同一路径下，且同名 -->
+ 		<!-- <mapper resource="sqlmapper.xml"/> -->
+ 		<!-- 批量注解 （映射文件与接口同包） -->
+ 	<package name="com.problem.dao"/>
+ 	</mappers>
+ </configuration>
+ 

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.problem.dao.QuestionDao">
+	<!-- 1更新答案 -->
+	<update id="udpateAnswer">
+		update  question set answer=#{p.answer},animg=#{p.animg},status=#{p.status} where id =#{p.id}
+	</update>
+	<!-- 2updateStatus  更新状态 -->
+	<update id="updateStatus">
+	update question set status=#{p.status} where id=#{p.id}
+	</update>
+	<!-- 3添加问题
+	void insert(Question q); insert into question(content,type,qimg,uid,creationtime) values(?,?,?,?,now()) -->
+	<insert id="insert">	
+		insert into question(content,type,qimg,uid,creationtime) values(#{q.content},#{q.type},#{q.qimg},#{q.uid},now())
+	</insert>
+	<!-- //4删除问题。根据id。
+	void deleteById(int id); -->
+	
+	<delete id="deleteById">
+		delete from question  where id=#{id}
+	</delete>
+	<!-- //通过id -->
+	<select id="findById" resultType="com.problem.entity.Question">
+		select * from question where id =#{id}
+	</select>
+	
+	<!-- ResultData getByCondition(QuestionVO qvo); -->
+	
+	<select id="getByCondition" parameterType="com.problem.vo.QuestionVO" resultType="com.problem.entity.Question">
+		select * from question where 1=1 
+		<if test="status!=-1">
+			and status = #{status}
+		</if>
+		<if test="seachcontent!=null">
+		<!-- <bind name="q" value="'%'+seachcontent+'%'"></bind> -->
+			<!-- and content like #{q} -->
+			and content like concat(concat('%',#{seachcontent}),'%')
+		</if>
+		<if test="searchdate!=null">
+			and creationtime &gt;= #{searchdate}
+		</if>
+		<if test="searchdate2!=null">
+			and creationtime &lt;= #{searchdate2}
+		</if>
+		<if test="searchtype!=null">
+		<bind name="s" value="'%'+searchtype+'%'"></bind>
+			and type like #{s}
+		</if>
+		<if test="page!=null">
+			<bind name="p" value="page.limit*(page.page-1)"></bind>
+			limit #{p},#{page.limit}
+		</if>
+	</select>
+	<!--deleteByIdList   删除多个 -->
+	<delete id="deleteByIdList">
+		delete from question  where id in
+		<foreach item="item" index="index" collection="array"
+     	 open="(" separator="," close=")">
+        #{item}
+  		</foreach>
+
+	</delete>
+	
+</mapper>
